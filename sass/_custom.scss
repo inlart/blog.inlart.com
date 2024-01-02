@@ -21,14 +21,14 @@
     padding: .2em .6em;
     border-radius: 8px;
     background-color: $tag-bg-light;
-    font-size: 60%;
+    font-size: 75%;
     margin: .1em .1em;
     @media (prefers-color-scheme: dark) {
         background-color: $tag-bg-dark;
     }
 }
 
-.post-container {
+.postitem-container {
     display: flex;
     align-items: flex-start;
     padding: 1.5em 0;
@@ -39,14 +39,22 @@
     }
 }
 
-.post-metadata {
+.postitem-metadata {
     width: 12em;
 }
 
-.post-content {
+.postitem-content {
     flex: 1;
 
     h3 {
         margin: 0 0;
     }
+}
+
+.post-metadata {
+    font-size: 80%;
+}
+
+.post-header {
+    margin-bottom: 1.25em;
 }
