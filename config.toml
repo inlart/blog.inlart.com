@@ -1,4 +1,4 @@
-base_url = "https://inlart.github.io"
+base_url = "https://inlart.github.io/blog.inlart.com/"
 compile_sass = true
 build_search_index = true
 title = "inlart"
