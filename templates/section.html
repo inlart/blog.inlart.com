@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% set section = get_section(path="post/_index.md") %}
+
+<h1>{{ section.title }}</h1>
+{% for page in section.pages %}
+<div class="post-container">
+    <div class="post-metadata">
+        {% if page.date %}
+        <div>{{ page.date | date(format="%B %Y") }}</div>
+        {% endif %}
+    </div style="float: right;">
+    <div class="post-content">
+        <h3><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h3>
+        {% if page.taxonomies.tags %}
+        <div>
+            {% for tag in page.taxonomies.tags %}
+            <a class="tag" href="{{ get_taxonomy_url(kind='tags', name=tag) | safe }}">{{ tag }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}

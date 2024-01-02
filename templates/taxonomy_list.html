@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <ul>
+        {%- for term in terms -%}
+            <li class="tags-item">
+                    <a href="{{ term.permalink | safe }}">{{ term.name }}</a>
+            </li>
+        {%- endfor -%}
+    </ul>
+</div>
+
+{% endblock content %}
