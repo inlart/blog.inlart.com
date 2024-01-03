@@ -4,14 +4,14 @@
 
 {% set section = get_section(path="post/_index.md") %}
 
-<h1>{{ section.title }}</h1>
+<h2>{{ section.title }}</h2>
 {% for page in section.pages %}
 <div class="postitem-container">
     <div class="postitem-metadata">
         {% if page.date %}
         <div>{{ page.date | date(format="%B %Y") }}</div>
         {% endif %}
-    </div style="float: right;">
+    </div>
     <div class="postitem-content">
         <h3><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h3>
         {% if page.taxonomies.tags %}
