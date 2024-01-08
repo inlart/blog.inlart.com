@@ -3,7 +3,7 @@ title = "Disclosure"
 template = "disclosure.html"
 +++
 
-# Disclosure
+## Disclosure
 
 Media owner: Martin Hartl
 
