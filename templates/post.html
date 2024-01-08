@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h2>{{ page.title }}</h2>
+<div class="post-metadata">
+    <span>Published: <time datetime="{{ page.date | date() }}">{{ page.date | date(format="%B %e, %Y") }}</time></span>
+    {% if page.updated %}
+        <span>&middot;</span>
+        <span>Updated: <time datetime="{{ page.updated | date() }}">{{ page.updated | date(format="%B %e, %Y") }}</time></span>
+    {% endif %}
+    <span>&middot;</span>
+    <span>{{ page.reading_time }} minute read</span>
+</div>
 <article class="post-single">
-    <div class="post-header">
-        <h2>{{ page.title }}</h2>
-        <div class="post-metadata">
-            <span>Published: <time datetime="{{ page.date | date() }}">{{ page.date | date(format="%B %e, %Y") }}</time></span>
-            {% if page.updated %}
-                <span>&middot;</span>
-                <span>Updated: <time datetime="{{ page.updated | date() }}">{{ page.updated | date(format="%B %e, %Y") }}</time></span>
-            {% endif %}
-            <span>&middot;</span>
-            <span>{{ page.reading_time }} minute read</span>
-        </div>
-    </div>
     <div>{{ page.content | safe }}</div>
     <div>
         {% if page.taxonomies.tags %}
