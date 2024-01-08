@@ -1,0 +1,12 @@
+{% if title %}
+    {%- set name = title -%}
+{% elif section.title %}
+    {%- set name = section.title -%}
+{% elif page.title %}
+    {%- set name = page.title -%}
+{% elif term.name %}
+    {%- set name = term.name -%}
+{% else %}
+    {%- set name = "Blog" -%}
+{% endif %}
+{{- name ~ " &middot; inlart" -}}
