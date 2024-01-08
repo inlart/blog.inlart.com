@@ -34,7 +34,7 @@ The data exchange is done using protobuf. The relevant protobuf message for us i
 
 A few months ago there was also a [tool](https://github.com/dr3fty/cs2-inspect-gen) published which allows to generate inspect links for weapon skins that do not actually exist. This tool allows to inspect skins in-game which do not exist.
 
-## Any difference?
+### Any difference?
 
 The first obvious thing to try now is to get the no-star Karambit weapon skin information and compare it to a regular Karambit.
 Requesting the information for the no-star Karambit returns the following:
@@ -71,7 +71,7 @@ The no-star Karambit also doesn't include a `paintwear` and `paintseed`. The mis
 There is also a [Bayonet](steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198076597766A99309927D758371152553511212) with a star but with the missing `paintwear`. 
 This Bayonet also misses the `paintwear` and `paintseed`.
 
-# Quality
+### Quality
 
 The different `quality` makes the no-star not show the "★" in its name.
 This theory can be easily tested with the tool to generate inspect links for non-existing weapon skins.
