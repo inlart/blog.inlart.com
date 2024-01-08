@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>inlart - Technical</title>
+    <link rel="self" type="application/atom+xml" href="https://blog.inlart.com/categories/technical/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://blog.inlart.com"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-01-08T00:00:00+00:00</updated>
+    <id>https://blog.inlart.com/categories/technical/atom.xml</id>
+    <entry xml:lang="en">
+        <title>The no-star Karambit in Counter-Strike</title>
+        <published>2024-01-08T00:00:00+00:00</published>
+        <updated>2024-01-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://blog.inlart.com/post/counter-strike-no-star-karambit/"/>
+        <id>https://blog.inlart.com/post/counter-strike-no-star-karambit/</id>
+        
+        <content type="html" xml:base="https://blog.inlart.com/post/counter-strike-no-star-karambit/">&lt;p&gt;Counter-Strike is a very popular first-person shooter.
+I’m playing the game since 2017 and it’s definitely one of my favorite games since then.
+Since the Counter-Strike: Global Offensive &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.counter-strike.net&#x2F;armsdeal&quot;&gt;Arms Deal update&lt;&#x2F;a&gt; in 2013 the game includes weapon skins. Weapon skins only change the appearance of a weapon but do not provide any in-game advantages. Since the Arms Deal update in 2013 there are new weapon skins added regularly to the game.
+In 2023 the game&#x27;s successor Counter-Strike 2 was released which allowed players to also use weapon skins obtained in Counter-Strike: Global Offensive.
+Although not necessary for reading this post, there is an interesting &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=gd_QeY9uATA&quot;&gt;GDC talk&lt;&#x2F;a&gt; about why and how weapon skins were added to the game.&lt;&#x2F;p&gt;
+&lt;p&gt;Weapon skins can be obtained by in-game drops or by unboxing cases for real money.
+Whenever a new weapon skin is created the weapon skin properties are randomly generated. It’s random what skin you get but also how used it looks (wear) and some weapon skin textures are even randomly put on the weapon (seed).
+This leads to some very rare combinations which get traded for a lot of money.&lt;&#x2F;p&gt;
+&lt;p&gt;This post isn’t about a weapon skin that is just super rare to be dropped. It’s about a weapon skin that is impossible to unbox. The no-star Karambit.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;no-star-karambit&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#no-star-karambit&quot; aria-label=&quot;Anchor link for: no-star-karambit&quot;&gt;No-star Karambit&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;What makes the no-star Karambit different to all other Karambits is, that when inspecting it in game the displayed name is just “Karambit” instead of the usual name &amp;quot;★ Karambit&amp;quot;. In Counter-Strike all knives and gloves usually have a &amp;quot;★&amp;quot; preceding their displayed name while other weapon skins do not have the preceding &amp;quot;★&amp;quot;.
+The no-star Karambit was created by steam support and is different in some other ways as well as we will see in the &lt;a href=&quot;https:&#x2F;&#x2F;blog.inlart.com&#x2F;post&#x2F;counter-strike-no-star-karambit&#x2F;#any-difference&quot;&gt;technical analysis&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The weapon skin can be inspected in-game if you have Counter-Strike 2 installed using this link: &lt;a href=&quot;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview%20S76561198218243965A4667288050D12026300745402096731&quot;&gt;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview S76561198218243965A4667288050D12026300745402096731&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;counter-strike-weapon-skin-information&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#counter-strike-weapon-skin-information&quot; aria-label=&quot;Anchor link for: counter-strike-weapon-skin-information&quot;&gt;Counter-Strike Weapon Skin Information&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;If you want to check out a weapon skin you would usually open an inspect link to look at it in-game just like the link in the previous section.
+As the game hides some information we need to check the actual properties of the weapon. There are libraries that do exactly that. For python there is the &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ValvePython&#x2F;csgo&quot;&gt;csgo&lt;&#x2F;a&gt; module which I used to retrieve the weapon skin properties.
+The data exchange is done using protobuf. The relevant protobuf message for us is &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ValvePython&#x2F;csgo&#x2F;blob&#x2F;ed81efa8c36122e882ffa5247be1b327dbd20850&#x2F;protobufs&#x2F;cstrike15_gcmessages.proto#L801&quot;&gt;CEconItemPreviewDataBlock&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;A few months ago there was also a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;dr3fty&#x2F;cs2-inspect-gen&quot;&gt;tool&lt;&#x2F;a&gt; published which allows to generate inspect links for weapon skins that do not actually exist. This tool allows to inspect skins in-game which do not exist.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;any-difference&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#any-difference&quot; aria-label=&quot;Anchor link for: any-difference&quot;&gt;Any difference?&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The first obvious thing to try now is to get the no-star Karambit weapon skin information and compare it to a regular Karambit.
+Requesting the information for the no-star Karambit returns the following:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;itemid: 4667288050
+&lt;&#x2F;span&gt;&lt;span&gt;defindex: 507
+&lt;&#x2F;span&gt;&lt;span&gt;paintindex: 0
+&lt;&#x2F;span&gt;&lt;span&gt;rarity: 6
+&lt;&#x2F;span&gt;&lt;span&gt;quality: 4
+&lt;&#x2F;span&gt;&lt;span&gt;inventory: 3221225479
+&lt;&#x2F;span&gt;&lt;span&gt;origin: 7
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The information of a regular Karambit contains:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;itemid: 25750358286
+&lt;&#x2F;span&gt;&lt;span&gt;defindex: 507
+&lt;&#x2F;span&gt;&lt;span&gt;paintindex: 0
+&lt;&#x2F;span&gt;&lt;span&gt;rarity: 6
+&lt;&#x2F;span&gt;&lt;span&gt;quality: 3
+&lt;&#x2F;span&gt;&lt;span&gt;paintwear: 1031179971
+&lt;&#x2F;span&gt;&lt;span&gt;paintseed: 434
+&lt;&#x2F;span&gt;&lt;span&gt;inventory: 1
+&lt;&#x2F;span&gt;&lt;span&gt;origin: 8
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The difference of the &lt;code&gt;itemid&lt;&#x2F;code&gt; and &lt;code&gt;inventory&lt;&#x2F;code&gt; are not relevant.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;quality&lt;&#x2F;code&gt; difference is what makes the Karambit actually show up without the star but more on that &lt;a href=&quot;https:&#x2F;&#x2F;blog.inlart.com&#x2F;post&#x2F;counter-strike-no-star-karambit&#x2F;#quality&quot;&gt;later&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Unboxed weapon skins have an &lt;code&gt;origin&lt;&#x2F;code&gt; of &lt;code&gt;8&lt;&#x2F;code&gt; while weapon skins generated by the steam support have an &lt;code&gt;origin&lt;&#x2F;code&gt; of &lt;code&gt;7&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The no-star Karambit also doesn&#x27;t include a &lt;code&gt;paintwear&lt;&#x2F;code&gt; and &lt;code&gt;paintseed&lt;&#x2F;code&gt;. The missing &lt;code&gt;paintwear&lt;&#x2F;code&gt; makes the weapon skin show up as the lowest wear item in weapon skin databases like &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;csfloat.com&#x2F;db&quot;&gt;csfloat.com&lt;&#x2F;a&gt;.
+There is also a &lt;a href=&quot;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview%20S76561198076597766A99309927D758371152553511212&quot;&gt;Bayonet&lt;&#x2F;a&gt; with a star but with the missing &lt;code&gt;paintwear&lt;&#x2F;code&gt;. 
+This Bayonet also misses the &lt;code&gt;paintwear&lt;&#x2F;code&gt; and &lt;code&gt;paintseed&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;quality&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#quality&quot; aria-label=&quot;Anchor link for: quality&quot;&gt;Quality&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The different &lt;code&gt;quality&lt;&#x2F;code&gt; makes the no-star not show the &amp;quot;★&amp;quot; in its name.
+This theory can be easily tested with the tool to generate inspect links for non-existing weapon skins.
+You can create one &lt;a href=&quot;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview%200018FB03200028063004A9B4D108&quot;&gt;inspect link&lt;&#x2F;a&gt; with &lt;code&gt;quality = 4&lt;&#x2F;code&gt; and one &lt;a href=&quot;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview%200018FB03200028063003842B1C10&quot;&gt;inspect link&lt;&#x2F;a&gt; with &lt;code&gt;quality = 3&lt;&#x2F;code&gt; but otherwise have the exact same properties.&lt;&#x2F;p&gt;
+&lt;p&gt;While knife weapon skins come with the &amp;quot;★&amp;quot; in the displayed name the displayed name for weapons like the AK-47 doesn&#x27;t include it because the &lt;code&gt;quality&lt;&#x2F;code&gt; is not &lt;code&gt;3&lt;&#x2F;code&gt;.
+By generating an inspect link and setting the &lt;code&gt;quality&lt;&#x2F;code&gt; to &lt;code&gt;3&lt;&#x2F;code&gt; we can create &lt;a href=&quot;steam:&#x2F;&#x2F;rungame&#x2F;730&#x2F;76561202255233023&#x2F;+csgo_econ_action_preview%20001807202C28053003409505AF5D32D4&quot;&gt;inspect links&lt;&#x2F;a&gt; for weapon skins like the AK-47 which do display its name with a &amp;quot;★&amp;quot; although this usually wouldn&#x27;t show.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Revisiting &quot;Adding Asus X570 Support To OpenRGB&quot;</title>
+        <published>2021-05-09T00:00:00+00:00</published>
+        <updated>2024-01-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://blog.inlart.com/post/openrgb-asus-x570-revisited/"/>
+        <id>https://blog.inlart.com/post/openrgb-asus-x570-revisited/</id>
+        
+        <content type="html" xml:base="https://blog.inlart.com/post/openrgb-asus-x570-revisited/">&lt;p&gt;It&#x27;s been almost a year since I added support for Asus X570 boards to OpenRGB. I think this is a good time to recap what happened and changed within that year.&lt;&#x2F;p&gt;
+&lt;p&gt;In addition to the Asus X570 mainboards, Asus also uses the same controller for its B550 and Z470 boards. This means that the driver is actually used for quite some mainboards now. To my knowledge there haven&#x27;t been any major issues with the driver.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;windows&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#windows&quot; aria-label=&quot;Anchor link for: windows&quot;&gt;Windows&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Due to the USB controller being out-of-spec the initial version did crash in libusb on Windows. &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;libusb&#x2F;libusb&#x2F;issues&#x2F;725&quot;&gt;The issue&lt;&#x2F;a&gt; wasn&#x27;t fixed in libusb because out-of-spec USB devices aren&#x27;t supported. They also didn&#x27;t try to fix the segfault. Since OpenRGB was already using a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;CalcProgrammer1&#x2F;libusb&quot;&gt;forked libusb version&lt;&#x2F;a&gt; this version was &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;CalcProgrammer1&#x2F;libusb&#x2F;commit&#x2F;1c5a7d84ad5a644e913d7e29c559ea0b97d43fcc&quot;&gt;adjusted&lt;&#x2F;a&gt; to support the Aura USB controller. On Linux the USB controller didn&#x27;t cause any issues.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;bugs&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#bugs&quot; aria-label=&quot;Anchor link for: bugs&quot;&gt;Bugs?&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Besides the initial problems on Windows people usually struggle with the addressable headers. The number of LEDs on the addressable headers is set to zero by default which makes mode changes not work unless the zone is resized. This isn&#x27;t really a bug but bad UX and will hopefully change at some point.&lt;&#x2F;p&gt;
+&lt;p&gt;In addition there was an &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;gitlab.com&#x2F;CalcProgrammer1&#x2F;OpenRGB&#x2F;-&#x2F;issues&#x2F;361&quot;&gt;actual issue&lt;&#x2F;a&gt; on some of the mainboards where the colors didn&#x27;t get set properly. After having a look at a USB capture I realized the bytes 3 and 4 are currently set wrong for these mainboards. In the initial implementation byte 3 was sending the channel id and byte 4 was hard coded to &lt;code&gt;0xff&lt;&#x2F;code&gt; and &lt;code&gt;0x00&lt;&#x2F;code&gt; for mainboard LEDs and addressable LEDs respectively. As it turned out the two bytes are actually a 16 bit mask to select the colors to be updated. This might seem like a weird mix up but can be easily explained when looking at the bytes for one of the mainboards:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;name&lt;&#x2F;th&gt;&lt;th&gt;byte 3&lt;&#x2F;th&gt;&lt;th&gt;byte4&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;mainboard&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0x00&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0xff&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;addressable 1&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0x01&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0x00&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;addressable 2&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0x02&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;0x00&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;In the table byte 3 could be interpreted as an id with byte 4 being set to &lt;code&gt;0xff&lt;&#x2F;code&gt; for the mainboard channel and to &lt;code&gt;0x00&lt;&#x2F;code&gt; otherwise. When looking at other boards with a different number of LEDs it can be easily seen that the initial interpretation was wrong and the bytes actually should be interpreted as an LED mask.
+The protocol is now updated in the &lt;a href=&quot;https:&#x2F;&#x2F;blog.inlart.com&#x2F;post&#x2F;openrgb-asus-x570&#x2F;&quot;&gt;original blog post&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;further-improvements&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#further-improvements&quot; aria-label=&quot;Anchor link for: further-improvements&quot;&gt;Further Improvements&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Something I want to change in the near future is the naming of the non-addressable RGB headers. They are currently part of the mainboard zone but have the same naming as the mainboard LEDs which makes it hard to find them.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Adding Asus X570 Support To OpenRGB</title>
+        <published>2020-06-14T00:00:00+00:00</published>
+        <updated>2023-07-17T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://blog.inlart.com/post/openrgb-asus-x570/"/>
+        <id>https://blog.inlart.com/post/openrgb-asus-x570/</id>
+        
+        <content type="html" xml:base="https://blog.inlart.com/post/openrgb-asus-x570/">&lt;p&gt;The story of me adding a driver to control Asus X570 RGB starts somewhere in late 2019 when I created a PC parts list to replace my seven years old PC. Since I didn&#x27;t have any issues with my Asus mainboard in my old PC I went with Asus again and picked the Asus Prime X570-Pro.&lt;&#x2F;p&gt;
+&lt;p&gt;After building the PC and setting everything up I quickly wondered if there was a way to control my lighting. I looked at the official Asus site and was quickly disappointed since they only support Windows. After that I took a look at open source projects to control RGB devices. There are actually quite a lot of them. Most of them only supporting a single device or a collection of similar devices. But OpenRGB was different. After originally only supporting Asus mainboards the project added drivers for other devices to provide a single place for all your RGB controls.&lt;&#x2F;p&gt;
+&lt;p&gt;I tinkered around with the project and added support for the water cooler I use, the NZXT Kraken X62. It was actually pretty easy to do so. There were already other projects that had support for it and in addition there was a nice summary with captures of the protocol which made it really easy to add a driver to OpenRGB. I had not worked with USB communication before that, but since other drivers already did communicate with the device via USB I just followed what they did at that point.&lt;&#x2F;p&gt;
+&lt;p&gt;After adding support for my water cooler the next on my list was the mainboard. In comparison to the NZXT Kraken driver it was much more challenging than I originally anticipated. At the point of creating the driver there were no other projects I could rely on. The driver also had to support different mainboards. They can have a different number of integrated LEDs or addressable headers which actually reflects in the protocol. In addition to that the Asus software to control the mainboard didn&#x27;t find any devices in my Windows VM. Thus, I had to rely on captures and the really good analysis done by other members of the community to figure out the protocol and implementation.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;protocol&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#protocol&quot; aria-label=&quot;Anchor link for: protocol&quot;&gt;Protocol&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;The communication is done via USB and the RGB controller has VID &lt;code&gt;0B05&lt;&#x2F;code&gt; and PID &lt;code&gt;18F3&lt;&#x2F;code&gt;.
+All sent and received messages are 65 byte long. If the message doesn&#x27;t fill the 65 byte the rest is zero-filled.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;mainboard-information&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#mainboard-information&quot; aria-label=&quot;Anchor link for: mainboard-information&quot;&gt;Mainboard Information&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;led-ec1-version&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#led-ec1-version&quot; aria-label=&quot;Anchor link for: led-ec1-version&quot;&gt;LED EC1 Version&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;To request a LED EC1 Version response from the controller the message &lt;code&gt;0xEC82&lt;&#x2F;code&gt; is sent.
+The controller responds with a &lt;code&gt;0xEC02&lt;&#x2F;code&gt; message followed by an ASCII string.
+It only contains upper case letters, numbers and hyphens.
+This version string for my Prime X570-Pro is &lt;code&gt;AULA3-6K75-0109&lt;&#x2F;code&gt; which can also be found in the BIOS. The string is currently not used by the driver but shown in the information tab in OpenRGB.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;configuration-table&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#configuration-table&quot; aria-label=&quot;Anchor link for: configuration-table&quot;&gt;Configuration Table&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;To request the configuration table from the controller the message &lt;code&gt;0xECB0&lt;&#x2F;code&gt; is sent.
+The controller returns a message starting with &lt;code&gt;0xEC30&lt;&#x2F;code&gt;.
+Each line in the config table is 6 bytes long with the first entry starting at address &lt;code&gt;0x04&lt;&#x2F;code&gt; of the response message.&lt;&#x2F;p&gt;
+&lt;p&gt;The first two bytes are always set to &lt;code&gt;0x1E9F&lt;&#x2F;code&gt; for all X570 boards I have seen.
+The important values taken from the configuration table are located at &lt;code&gt;0x02&lt;&#x2F;code&gt; for the number of addressable channels and &lt;code&gt;0x1B&lt;&#x2F;code&gt; for the number of mainboard LEDs (this includes integrated LEDs and the RGB headers).&lt;&#x2F;p&gt;
+&lt;p&gt;The response by my mainboard looks like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;1E 9F 01 01 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;78 3C 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 08 09 02
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;span&gt;00 00 00 00 00 00
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;setting-colors-and-effects&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#setting-colors-and-effects&quot; aria-label=&quot;Anchor link for: setting-colors-and-effects&quot;&gt;Setting Colors and Effects&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;channel-id&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#channel-id&quot; aria-label=&quot;Anchor link for: channel-id&quot;&gt;Channel ID&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;There are generally two different types of channels.
+A type for a &lt;em&gt;fixed&lt;&#x2F;em&gt; number of LEDs (i.e. the mainboard, there is only a single fixed channel) and a channel for each &lt;em&gt;addressable&lt;&#x2F;em&gt; RGB header.
+For different messages in the protocol there are different ids sent to refer to certain channels.&lt;&#x2F;p&gt;
+&lt;p&gt;The channel id sent for effects:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;channel type&lt;&#x2F;th&gt;&lt;th&gt;channel_effect id&lt;&#x2F;th&gt;&lt;th&gt;comment&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;fixed&lt;&#x2F;td&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;addressable&lt;&#x2F;td&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;For mainboards that only provide addressable RGB headers the addressable channel_effect id is &lt;code&gt;0x00&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Since the effect can only be changed for each type and not actual channel one could also refer to this as a channel type instead of an id.&lt;&#x2F;p&gt;
+&lt;p&gt;For the direct mode the fixed channel has id &lt;code&gt;0x04&lt;&#x2F;code&gt; and the addressable ids start at &lt;code&gt;0x00&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;channel type&lt;&#x2F;th&gt;&lt;th&gt;channel_direct id&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;fixed&lt;&#x2F;td&gt;&lt;td&gt;0x04&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;addressable #n&lt;&#x2F;td&gt;&lt;td&gt;n-1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h4 id=&quot;set-effect-mode&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#set-effect-mode&quot; aria-label=&quot;Anchor link for: set-effect-mode&quot;&gt;Set Effect Mode&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;Modes that are currently supported by OpenRGB:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;id&lt;&#x2F;th&gt;&lt;th&gt;mode name&lt;&#x2F;th&gt;&lt;th&gt;number of colors&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;off&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;static&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x02&lt;&#x2F;td&gt;&lt;td&gt;breathing&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x03&lt;&#x2F;td&gt;&lt;td&gt;flashing&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x04&lt;&#x2F;td&gt;&lt;td&gt;spectrum cycle&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x05&lt;&#x2F;td&gt;&lt;td&gt;rainbow&lt;&#x2F;td&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x07&lt;&#x2F;td&gt;&lt;td&gt;chase fade&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x09&lt;&#x2F;td&gt;&lt;td&gt;chase&lt;&#x2F;td&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0xff&lt;&#x2F;td&gt;&lt;td&gt;direct&lt;&#x2F;td&gt;&lt;td&gt;see direct mode colors&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;To switch the mode for a channel the following message is sent to the mainboard controller:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;index&lt;&#x2F;th&gt;&lt;th&gt;mode&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;0xEC&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;0x35&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x02&lt;&#x2F;td&gt;&lt;td&gt;channel_effect id&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x03&lt;&#x2F;td&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x04&lt;&#x2F;td&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x05&lt;&#x2F;td&gt;&lt;td&gt;mode id&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h4 id=&quot;colors&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#colors&quot; aria-label=&quot;Anchor link for: colors&quot;&gt;Colors&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;This messages are used to change the color for every mode except the direct mode.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;index&lt;&#x2F;th&gt;&lt;th&gt;mode&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;0xEC&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;0x36&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x02&lt;&#x2F;td&gt;&lt;td&gt;LED mask&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x03&lt;&#x2F;td&gt;&lt;td&gt;LED mask&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x04&lt;&#x2F;td&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x05 + offset&lt;&#x2F;td&gt;&lt;td&gt;colors&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The number of colors sent depends on the channel type. For the fixed channel it is sending a value for each LED and for the addressable only a single color. Colors are sent in RGB order with 1 byte each (red, green, blue).&lt;&#x2F;p&gt;
+&lt;p&gt;The color data is shifted by an &lt;code&gt;offset&lt;&#x2F;code&gt; depending on the channel id. It is shifted by the number of colors that would be sent by all the previous channels and the LED mask is set accordingly.
+The message is only sent if the effect mode supports colors.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;direct-mode-colors&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#direct-mode-colors&quot; aria-label=&quot;Anchor link for: direct-mode-colors&quot;&gt;Direct Mode Colors&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;This message is used to set the color for the direct mode.
+The direct mode lets you set the color of each LED individually.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;index&lt;&#x2F;th&gt;&lt;th&gt;mode&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;0xEC&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;0x40&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x02&lt;&#x2F;td&gt;&lt;td&gt;apply | channel_direct id&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x03&lt;&#x2F;td&gt;&lt;td&gt;start led&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x04&lt;&#x2F;td&gt;&lt;td&gt;led_count&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x05&lt;&#x2F;td&gt;&lt;td&gt;color data&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Setting &lt;code&gt;apply&lt;&#x2F;code&gt; (&lt;code&gt;0x1 &amp;lt;&amp;lt; 4&lt;&#x2F;code&gt;) makes the colors actually show up. This is usually done in the last direct mode packet. The color data contains &lt;code&gt;led_count&lt;&#x2F;code&gt; RGB values (max 20).&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;commit&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#commit&quot; aria-label=&quot;Anchor link for: commit&quot;&gt;Commit&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;There is also a commit message to preserve the sate of modes&#x2F;colors if the mainboard isn&#x27;t powered:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;index&lt;&#x2F;th&gt;&lt;th&gt;mode&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0x00&lt;&#x2F;td&gt;&lt;td&gt;0xEC&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x01&lt;&#x2F;td&gt;&lt;td&gt;0x3F&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0x02&lt;&#x2F;td&gt;&lt;td&gt;0x55&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+</content>
+        
+    </entry>
+</feed>

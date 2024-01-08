@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding Asus X570 Support To OpenRGB &middot; inlart</title>
+  <link rel="icon" type="image/x-icon" href="https://blog.inlart.com/favicon.svg">
+  <link rel="stylesheet" href="https://blog.inlart.com/main.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header-container">
+        <h1><a href="https:&#x2F;&#x2F;blog.inlart.com">inlart</a></h1>
+    </header>
+    <section>
+      
+<h2>Adding Asus X570 Support To OpenRGB</h2>
+<div class="post-metadata">
+    <span>Published: <time datetime="2020-06-14">June 14, 2020</time></span>
+    
+        <span>&middot;</span>
+        <span>Updated: <time datetime="2023-07-17">July 17, 2023</time></span>
+    
+    <span>&middot;</span>
+    <span>6 minute read</span>
+</div>
+<article class="post-single">
+    <div><p>The story of me adding a driver to control Asus X570 RGB starts somewhere in late 2019 when I created a PC parts list to replace my seven years old PC. Since I didn't have any issues with my Asus mainboard in my old PC I went with Asus again and picked the Asus Prime X570-Pro.</p>
+<p>After building the PC and setting everything up I quickly wondered if there was a way to control my lighting. I looked at the official Asus site and was quickly disappointed since they only support Windows. After that I took a look at open source projects to control RGB devices. There are actually quite a lot of them. Most of them only supporting a single device or a collection of similar devices. But OpenRGB was different. After originally only supporting Asus mainboards the project added drivers for other devices to provide a single place for all your RGB controls.</p>
+<p>I tinkered around with the project and added support for the water cooler I use, the NZXT Kraken X62. It was actually pretty easy to do so. There were already other projects that had support for it and in addition there was a nice summary with captures of the protocol which made it really easy to add a driver to OpenRGB. I had not worked with USB communication before that, but since other drivers already did communicate with the device via USB I just followed what they did at that point.</p>
+<p>After adding support for my water cooler the next on my list was the mainboard. In comparison to the NZXT Kraken driver it was much more challenging than I originally anticipated. At the point of creating the driver there were no other projects I could rely on. The driver also had to support different mainboards. They can have a different number of integrated LEDs or addressable headers which actually reflects in the protocol. In addition to that the Asus software to control the mainboard didn't find any devices in my Windows VM. Thus, I had to rely on captures and the really good analysis done by other members of the community to figure out the protocol and implementation.</p>
+<h2 id="protocol"><a class="zola-anchor" href="#protocol" aria-label="Anchor link for: protocol">Protocol</a></h2>
+<p>The communication is done via USB and the RGB controller has VID <code>0B05</code> and PID <code>18F3</code>.
+All sent and received messages are 65 byte long. If the message doesn't fill the 65 byte the rest is zero-filled.</p>
+<h3 id="mainboard-information"><a class="zola-anchor" href="#mainboard-information" aria-label="Anchor link for: mainboard-information">Mainboard Information</a></h3>
+<h4 id="led-ec1-version"><a class="zola-anchor" href="#led-ec1-version" aria-label="Anchor link for: led-ec1-version">LED EC1 Version</a></h4>
+<p>To request a LED EC1 Version response from the controller the message <code>0xEC82</code> is sent.
+The controller responds with a <code>0xEC02</code> message followed by an ASCII string.
+It only contains upper case letters, numbers and hyphens.
+This version string for my Prime X570-Pro is <code>AULA3-6K75-0109</code> which can also be found in the BIOS. The string is currently not used by the driver but shown in the information tab in OpenRGB.</p>
+<h4 id="configuration-table"><a class="zola-anchor" href="#configuration-table" aria-label="Anchor link for: configuration-table">Configuration Table</a></h4>
+<p>To request the configuration table from the controller the message <code>0xECB0</code> is sent.
+The controller returns a message starting with <code>0xEC30</code>.
+Each line in the config table is 6 bytes long with the first entry starting at address <code>0x04</code> of the response message.</p>
+<p>The first two bytes are always set to <code>0x1E9F</code> for all X570 boards I have seen.
+The important values taken from the configuration table are located at <code>0x02</code> for the number of addressable channels and <code>0x1B</code> for the number of mainboard LEDs (this includes integrated LEDs and the RGB headers).</p>
+<p>The response by my mainboard looks like this:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>1E 9F 01 01 00 00
+</span><span>78 3C 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 08 09 02
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span><span>00 00 00 00 00 00
+</span></code></pre>
+<h3 id="setting-colors-and-effects"><a class="zola-anchor" href="#setting-colors-and-effects" aria-label="Anchor link for: setting-colors-and-effects">Setting Colors and Effects</a></h3>
+<h4 id="channel-id"><a class="zola-anchor" href="#channel-id" aria-label="Anchor link for: channel-id">Channel ID</a></h4>
+<p>There are generally two different types of channels.
+A type for a <em>fixed</em> number of LEDs (i.e. the mainboard, there is only a single fixed channel) and a channel for each <em>addressable</em> RGB header.
+For different messages in the protocol there are different ids sent to refer to certain channels.</p>
+<p>The channel id sent for effects:</p>
+<table><thead><tr><th>channel type</th><th>channel_effect id</th><th>comment</th></tr></thead><tbody>
+<tr><td>fixed</td><td>0x00</td><td></td></tr>
+<tr><td>addressable</td><td>0x01</td><td>For mainboards that only provide addressable RGB headers the addressable channel_effect id is <code>0x00</code></td></tr>
+</tbody></table>
+<p>Since the effect can only be changed for each type and not actual channel one could also refer to this as a channel type instead of an id.</p>
+<p>For the direct mode the fixed channel has id <code>0x04</code> and the addressable ids start at <code>0x00</code>:</p>
+<table><thead><tr><th>channel type</th><th>channel_direct id</th></tr></thead><tbody>
+<tr><td>fixed</td><td>0x04</td></tr>
+<tr><td>addressable #n</td><td>n-1</td></tr>
+</tbody></table>
+<h4 id="set-effect-mode"><a class="zola-anchor" href="#set-effect-mode" aria-label="Anchor link for: set-effect-mode">Set Effect Mode</a></h4>
+<p>Modes that are currently supported by OpenRGB:</p>
+<table><thead><tr><th>id</th><th>mode name</th><th>number of colors</th></tr></thead><tbody>
+<tr><td>0x00</td><td>off</td><td>0</td></tr>
+<tr><td>0x01</td><td>static</td><td>1</td></tr>
+<tr><td>0x02</td><td>breathing</td><td>1</td></tr>
+<tr><td>0x03</td><td>flashing</td><td>1</td></tr>
+<tr><td>0x04</td><td>spectrum cycle</td><td>0</td></tr>
+<tr><td>0x05</td><td>rainbow</td><td>0</td></tr>
+<tr><td>0x07</td><td>chase fade</td><td>1</td></tr>
+<tr><td>0x09</td><td>chase</td><td>1</td></tr>
+<tr><td>0xff</td><td>direct</td><td>see direct mode colors</td></tr>
+</tbody></table>
+<p>To switch the mode for a channel the following message is sent to the mainboard controller:</p>
+<table><thead><tr><th>index</th><th>mode</th></tr></thead><tbody>
+<tr><td>0x00</td><td>0xEC</td></tr>
+<tr><td>0x01</td><td>0x35</td></tr>
+<tr><td>0x02</td><td>channel_effect id</td></tr>
+<tr><td>0x03</td><td>0x00</td></tr>
+<tr><td>0x04</td><td>0x00</td></tr>
+<tr><td>0x05</td><td>mode id</td></tr>
+</tbody></table>
+<h4 id="colors"><a class="zola-anchor" href="#colors" aria-label="Anchor link for: colors">Colors</a></h4>
+<p>This messages are used to change the color for every mode except the direct mode.</p>
+<table><thead><tr><th>index</th><th>mode</th></tr></thead><tbody>
+<tr><td>0x00</td><td>0xEC</td></tr>
+<tr><td>0x01</td><td>0x36</td></tr>
+<tr><td>0x02</td><td>LED mask</td></tr>
+<tr><td>0x03</td><td>LED mask</td></tr>
+<tr><td>0x04</td><td>0x00</td></tr>
+<tr><td>0x05 + offset</td><td>colors</td></tr>
+</tbody></table>
+<p>The number of colors sent depends on the channel type. For the fixed channel it is sending a value for each LED and for the addressable only a single color. Colors are sent in RGB order with 1 byte each (red, green, blue).</p>
+<p>The color data is shifted by an <code>offset</code> depending on the channel id. It is shifted by the number of colors that would be sent by all the previous channels and the LED mask is set accordingly.
+The message is only sent if the effect mode supports colors.</p>
+<h4 id="direct-mode-colors"><a class="zola-anchor" href="#direct-mode-colors" aria-label="Anchor link for: direct-mode-colors">Direct Mode Colors</a></h4>
+<p>This message is used to set the color for the direct mode.
+The direct mode lets you set the color of each LED individually.</p>
+<table><thead><tr><th>index</th><th>mode</th></tr></thead><tbody>
+<tr><td>0x00</td><td>0xEC</td></tr>
+<tr><td>0x01</td><td>0x40</td></tr>
+<tr><td>0x02</td><td>apply | channel_direct id</td></tr>
+<tr><td>0x03</td><td>start led</td></tr>
+<tr><td>0x04</td><td>led_count</td></tr>
+<tr><td>0x05</td><td>color data</td></tr>
+</tbody></table>
+<p>Setting <code>apply</code> (<code>0x1 &lt;&lt; 4</code>) makes the colors actually show up. This is usually done in the last direct mode packet. The color data contains <code>led_count</code> RGB values (max 20).</p>
+<h4 id="commit"><a class="zola-anchor" href="#commit" aria-label="Anchor link for: commit">Commit</a></h4>
+<p>There is also a commit message to preserve the sate of modes/colors if the mainboard isn't powered:</p>
+<table><thead><tr><th>index</th><th>mode</th></tr></thead><tbody>
+<tr><td>0x00</td><td>0xEC</td></tr>
+<tr><td>0x01</td><td>0x3F</td></tr>
+<tr><td>0x02</td><td>0x55</td></tr>
+</tbody></table>
+</div>
+    <div>
+        
+        <div>
+            <h2>Tags</h2>
+            
+                <a class="tag" href="https://blog.inlart.com/tags/openrgb/">OpenRGB</a>
+            
+                <a class="tag" href="https://blog.inlart.com/tags/reverse-engineering/">Reverse Engineering</a>
+            
+                <a class="tag" href="https://blog.inlart.com/tags/rgb/">RGB</a>
+            
+                <a class="tag" href="https://blog.inlart.com/tags/hardware/">Hardware</a>
+            
+        </div>
+        
+    </div>
+</article>
+
+    </section>
+    <footer>
+      <a href="https://github.com/inlart" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
+          viewBox="0 0 16 16">
+          <title>GitHub</title>
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+        </svg></a>
+      &middot;
+      <a href="https://gitlab.com/inlart" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-gitlab" viewBox="0 0 16 16">
+          <title>GitLab</title>
+          <path
+            d="m15.734 6.1-.022-.058L13.534.358a.568.568 0 0 0-.563-.356.583.583 0 0 0-.328.122.582.582 0 0 0-.193.294l-1.47 4.499H5.025l-1.47-4.5A.572.572 0 0 0 2.47.358L.289 6.04l-.022.057A4.044 4.044 0 0 0 1.61 10.77l.007.006.02.014 3.318 2.485 1.64 1.242 1 .755a.673.673 0 0 0 .814 0l1-.755 1.64-1.242 3.338-2.5.009-.007a4.046 4.046 0 0 0 1.34-4.668Z" />
+        </svg></a>
+      &middot;
+      <a href="https://twitter.com/inlart" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x"
+          viewBox="0 0 16 16">
+          <title>X (Twitter)</title>
+          <path
+            d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+        </svg></a>
+        &middot;
+      <a href="https://blog.inlart.com/disclosure/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <title>Disclosure</title>
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+        </svg></a>
+    </footer>
+  </div>
+</body>
+
+</html>

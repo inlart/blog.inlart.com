@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The no-star Karambit in Counter-Strike &middot; inlart</title>
+  <link rel="icon" type="image/x-icon" href="https://blog.inlart.com/favicon.svg">
+  <link rel="stylesheet" href="https://blog.inlart.com/main.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header-container">
+        <h1><a href="https:&#x2F;&#x2F;blog.inlart.com">inlart</a></h1>
+    </header>
+    <section>
+      
+<h2>The no-star Karambit in Counter-Strike</h2>
+<div class="post-metadata">
+    <span>Published: <time datetime="2024-01-08">January  8, 2024</time></span>
+    
+    <span>&middot;</span>
+    <span>5 minute read</span>
+</div>
+<article class="post-single">
+    <div><p>Counter-Strike is a very popular first-person shooter.
+I’m playing the game since 2017 and it’s definitely one of my favorite games since then.
+Since the Counter-Strike: Global Offensive <a rel="noopener" target="_blank" href="https://www.counter-strike.net/armsdeal">Arms Deal update</a> in 2013 the game includes weapon skins. Weapon skins only change the appearance of a weapon but do not provide any in-game advantages. Since the Arms Deal update in 2013 there are new weapon skins added regularly to the game.
+In 2023 the game's successor Counter-Strike 2 was released which allowed players to also use weapon skins obtained in Counter-Strike: Global Offensive.
+Although not necessary for reading this post, there is an interesting <a rel="noopener" target="_blank" href="https://www.youtube.com/watch?v=gd_QeY9uATA">GDC talk</a> about why and how weapon skins were added to the game.</p>
+<p>Weapon skins can be obtained by in-game drops or by unboxing cases for real money.
+Whenever a new weapon skin is created the weapon skin properties are randomly generated. It’s random what skin you get but also how used it looks (wear) and some weapon skin textures are even randomly put on the weapon (seed).
+This leads to some very rare combinations which get traded for a lot of money.</p>
+<p>This post isn’t about a weapon skin that is just super rare to be dropped. It’s about a weapon skin that is impossible to unbox. The no-star Karambit.</p>
+<h2 id="no-star-karambit"><a class="zola-anchor" href="#no-star-karambit" aria-label="Anchor link for: no-star-karambit">No-star Karambit</a></h2>
+<p>What makes the no-star Karambit different to all other Karambits is, that when inspecting it in game the displayed name is just “Karambit” instead of the usual name &quot;★ Karambit&quot;. In Counter-Strike all knives and gloves usually have a &quot;★&quot; preceding their displayed name while other weapon skins do not have the preceding &quot;★&quot;.
+The no-star Karambit was created by steam support and is different in some other ways as well as we will see in the <a href="https://blog.inlart.com/post/counter-strike-no-star-karambit/#any-difference">technical analysis</a>.</p>
+<p>The weapon skin can be inspected in-game if you have Counter-Strike 2 installed using this link: <a href="steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198218243965A4667288050D12026300745402096731">steam://rungame/730/76561202255233023/+csgo_econ_action_preview S76561198218243965A4667288050D12026300745402096731</a></p>
+<h2 id="counter-strike-weapon-skin-information"><a class="zola-anchor" href="#counter-strike-weapon-skin-information" aria-label="Anchor link for: counter-strike-weapon-skin-information">Counter-Strike Weapon Skin Information</a></h2>
+<p>If you want to check out a weapon skin you would usually open an inspect link to look at it in-game just like the link in the previous section.
+As the game hides some information we need to check the actual properties of the weapon. There are libraries that do exactly that. For python there is the <a rel="noopener" target="_blank" href="https://github.com/ValvePython/csgo">csgo</a> module which I used to retrieve the weapon skin properties.
+The data exchange is done using protobuf. The relevant protobuf message for us is <a rel="noopener" target="_blank" href="https://github.com/ValvePython/csgo/blob/ed81efa8c36122e882ffa5247be1b327dbd20850/protobufs/cstrike15_gcmessages.proto#L801">CEconItemPreviewDataBlock</a>.</p>
+<p>A few months ago there was also a <a rel="noopener" target="_blank" href="https://github.com/dr3fty/cs2-inspect-gen">tool</a> published which allows to generate inspect links for weapon skins that do not actually exist. This tool allows to inspect skins in-game which do not exist.</p>
+<h3 id="any-difference"><a class="zola-anchor" href="#any-difference" aria-label="Anchor link for: any-difference">Any difference?</a></h3>
+<p>The first obvious thing to try now is to get the no-star Karambit weapon skin information and compare it to a regular Karambit.
+Requesting the information for the no-star Karambit returns the following:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>itemid: 4667288050
+</span><span>defindex: 507
+</span><span>paintindex: 0
+</span><span>rarity: 6
+</span><span>quality: 4
+</span><span>inventory: 3221225479
+</span><span>origin: 7
+</span></code></pre>
+<p>The information of a regular Karambit contains:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>itemid: 25750358286
+</span><span>defindex: 507
+</span><span>paintindex: 0
+</span><span>rarity: 6
+</span><span>quality: 3
+</span><span>paintwear: 1031179971
+</span><span>paintseed: 434
+</span><span>inventory: 1
+</span><span>origin: 8
+</span></code></pre>
+<p>The difference of the <code>itemid</code> and <code>inventory</code> are not relevant.</p>
+<p>The <code>quality</code> difference is what makes the Karambit actually show up without the star but more on that <a href="https://blog.inlart.com/post/counter-strike-no-star-karambit/#quality">later</a>.</p>
+<p>Unboxed weapon skins have an <code>origin</code> of <code>8</code> while weapon skins generated by the steam support have an <code>origin</code> of <code>7</code>.</p>
+<p>The no-star Karambit also doesn't include a <code>paintwear</code> and <code>paintseed</code>. The missing <code>paintwear</code> makes the weapon skin show up as the lowest wear item in weapon skin databases like <a rel="noopener" target="_blank" href="https://csfloat.com/db">csfloat.com</a>.
+There is also a <a href="steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198076597766A99309927D758371152553511212">Bayonet</a> with a star but with the missing <code>paintwear</code>. 
+This Bayonet also misses the <code>paintwear</code> and <code>paintseed</code>.</p>
+<h3 id="quality"><a class="zola-anchor" href="#quality" aria-label="Anchor link for: quality">Quality</a></h3>
+<p>The different <code>quality</code> makes the no-star not show the &quot;★&quot; in its name.
+This theory can be easily tested with the tool to generate inspect links for non-existing weapon skins.
+You can create one <a href="steam://rungame/730/76561202255233023/+csgo_econ_action_preview%200018FB03200028063004A9B4D108">inspect link</a> with <code>quality = 4</code> and one <a href="steam://rungame/730/76561202255233023/+csgo_econ_action_preview%200018FB03200028063003842B1C10">inspect link</a> with <code>quality = 3</code> but otherwise have the exact same properties.</p>
+<p>While knife weapon skins come with the &quot;★&quot; in the displayed name the displayed name for weapons like the AK-47 doesn't include it because the <code>quality</code> is not <code>3</code>.
+By generating an inspect link and setting the <code>quality</code> to <code>3</code> we can create <a href="steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20001807202C28053003409505AF5D32D4">inspect links</a> for weapon skins like the AK-47 which do display its name with a &quot;★&quot; although this usually wouldn't show.</p>
+</div>
+    <div>
+        
+        <div>
+            <h2>Tags</h2>
+            
+                <a class="tag" href="https://blog.inlart.com/tags/counter-strike/">Counter-Strike</a>
+            
+        </div>
+        
+    </div>
+</article>
+
+    </section>
+    <footer>
+      <a href="https://github.com/inlart" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
+          viewBox="0 0 16 16">
+          <title>GitHub</title>
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+        </svg></a>
+      &middot;
+      <a href="https://gitlab.com/inlart" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-gitlab" viewBox="0 0 16 16">
+          <title>GitLab</title>
+          <path
+            d="m15.734 6.1-.022-.058L13.534.358a.568.568 0 0 0-.563-.356.583.583 0 0 0-.328.122.582.582 0 0 0-.193.294l-1.47 4.499H5.025l-1.47-4.5A.572.572 0 0 0 2.47.358L.289 6.04l-.022.057A4.044 4.044 0 0 0 1.61 10.77l.007.006.02.014 3.318 2.485 1.64 1.242 1 .755a.673.673 0 0 0 .814 0l1-.755 1.64-1.242 3.338-2.5.009-.007a4.046 4.046 0 0 0 1.34-4.668Z" />
+        </svg></a>
+      &middot;
+      <a href="https://twitter.com/inlart" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x"
+          viewBox="0 0 16 16">
+          <title>X (Twitter)</title>
+          <path
+            d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+        </svg></a>
+        &middot;
+      <a href="https://blog.inlart.com/disclosure/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <title>Disclosure</title>
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+        </svg></a>
+    </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>inlart - Personal</title>
+    <link rel="self" type="application/atom+xml" href="https://blog.inlart.com/categories/personal/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://blog.inlart.com"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2020-06-15T00:00:00+00:00</updated>
+    <id>https://blog.inlart.com/categories/personal/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Zero</title>
+        <published>2020-03-13T00:00:00+00:00</published>
+        <updated>2020-06-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://blog.inlart.com/post/zero/"/>
+        <id>https://blog.inlart.com/post/zero/</id>
+        
+        <content type="html" xml:base="https://blog.inlart.com/post/zero/">&lt;p&gt;This post should remember my future self why I started the blog.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;I want to use this blog to create something to look back at in a few years. This should be a place that doesn&#x27;t get lost in ten years. Although I will forget about most of the posts, this blog will not. It should become something to be able to look at and remember what was going on in my life back then.&lt;&#x2F;li&gt;
+&lt;li&gt;I want to improve my writing skills. When I get myself to start writing I usually rewrite every sentence several times until I feel comfortable to keep it.&lt;&#x2F;li&gt;
+&lt;li&gt;There might sometimes be a topic I&#x27;m writing about that is interesting for others.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>
